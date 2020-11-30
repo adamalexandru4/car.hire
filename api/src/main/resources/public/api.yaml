@@ -32,7 +32,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: "#/components/schemas/NewUserDTO"
       responses:
         '201':
           $ref: '#/components/responses/ResourceCreated'
@@ -64,7 +64,7 @@ paths:
               schema:
                 type: "array"
                 items:
-                  $ref: "#/components/schemas/User"
+                  $ref: "#/components/schemas/UserDTO"
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -84,14 +84,14 @@ paths:
           description: User ID
           required: true
           schema:
-            type: "integer"
+            type: "string"
       responses:
         '200':
           description: Return user details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserDTO'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -112,14 +112,14 @@ paths:
           description: User ID
           required: true
           schema:
-            type: "integer"
+            type: "string"
       requestBody:
         description: "Update user body"
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: "#/components/schemas/PatchBody"
       responses:
         '200':
           $ref: '#/components/responses/Success'
@@ -140,7 +140,7 @@ paths:
           name: "id"
           required: true
           schema:
-            type: "integer"
+            type: "string"
           description: User ID
       responses:
         '200':
@@ -164,7 +164,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Car"
+              $ref: "#/components/schemas/NewCarDTO"
       responses:
         '201':
           $ref: '#/components/responses/ResourceCreated'
@@ -195,7 +195,7 @@ paths:
               schema:
                 type: "array"
                 items:
-                  $ref: "#/components/schemas/Car"
+                  $ref: "#/components/schemas/CarDTO"
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -213,7 +213,7 @@ paths:
           name: "id"
           required: true
           schema:
-            type: "integer"
+            type: "string"
           description: Car ID
       responses:
         '200':
@@ -221,7 +221,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Car'
+                $ref: '#/components/schemas/CarDTO'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -241,7 +241,7 @@ paths:
           name: "id"
           required: true
           schema:
-            type: "integer"
+            type: "string"
           description: Car ID
       requestBody:
         description: "Update car body"
@@ -249,7 +249,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Car"
+              $ref: "#/components/schemas/PatchBody"
       responses:
         '200':
           $ref: '#/components/responses/Success'
@@ -270,7 +270,7 @@ paths:
           name: "id"
           required: true
           schema:
-            type: "integer"
+            type: "string"
           description: Car ID
       responses:
         '200':
@@ -295,7 +295,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Reservation"
+              $ref: "#/components/schemas/NewReservationDTO"
       responses:
         '201':
           $ref: '#/components/responses/ResourceCreated'
@@ -327,7 +327,7 @@ paths:
               schema:
                 type: "array"
                 items:
-                  $ref: "#/components/schemas/Reservation"
+                  $ref: "#/components/schemas/ReservationDTO"
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -346,7 +346,7 @@ paths:
           name: "id"
           required: true
           schema:
-            type: "integer"
+            type: "string"
           description: Reservation ID
       responses:
         '200':
@@ -354,7 +354,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Reservation'
+                $ref: '#/components/schemas/ReservationDTO'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -374,7 +374,7 @@ paths:
           name: "id"
           required: true
           schema:
-            type: "integer"
+            type: "string"
           description: Reservation ID
       requestBody:
         description: "Update reservation body"
@@ -382,7 +382,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Reservation" #### this should have another DTO with required fields?
+              $ref: "#/components/schemas/PatchBody"
       responses:
         '200':
           $ref: '#/components/responses/Success'
@@ -403,7 +403,7 @@ paths:
           name: "id"
           required: true
           schema:
-            type: "integer"
+            type: "string"
           description: Reservation ID
       responses:
         '200':
@@ -457,12 +457,37 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorDTO'
   schemas:
-    User:
+    PatchBody:
+      type: array
+      items:
+        $ref: '#/components/schemas/PatchDocument'
+    PatchDocument:
+      type: object
+      description: HTTP JSONPatch document from RFC 6902
+      properties:
+        op:
+          type: string
+          description: Operation available for object
+          enum:
+            - 'add'
+            - 'remove'
+            - 'replace'
+        path:
+          type: string
+          description: JSON Pointer
+          example: "a/b/c"
+        value:
+          type: string
+          description: JSON pointer value
+          example: "newValue"
+      required:
+        - op
+        - path
+        - value
+
+    NewUserDTO:
       type: object
       properties:
-        id:
-          type: integer
-          format: "int64"
         username:
           type: string
         password:
@@ -474,16 +499,48 @@ components:
           type: string
         countryOfResidence:
           type: string
-        driverLicenseNo:
+          example: "ID of country"
+        driverLicense:
           type: string
-        status:
-          type: string
-    Car:
+    UserDTO:
       type: object
       properties:
         id:
+          type: string
+        username:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        countryOfResidence:
+          type: string
+        driverLicense:
+          type: string
+        status:
+          type: string
+    NewCarDTO:
+      type: object
+      properties:
+        make:
+          type: string
+          example: "ID of make"
+        model:
+          type: string
+        year:
           type: integer
-          format: int64
+        mileage:
+          type: integer
+        fuel:
+          type: number
+          format: float
+        carClass:
+          type: string
+    CarDTO:
+      type: object
+      properties:
+        id:
+          type: string
         make:
           type: string
         model:
@@ -492,7 +549,6 @@ components:
           type: integer
         mileage:
           type: integer
-          format: int64
         fuel:
           type: number
           format: float
@@ -500,18 +556,33 @@ components:
           type: string
         status:
           type: string
-    Reservation:
+    NewReservationDTO:
+      type: object
+      properties:
+        userID:
+          type: string
+          example: "User ID"
+        carID:
+          type: string
+          example: "Car ID"
+        startDateTime:
+          type: string
+          format: "date-time"
+        endDateTime:
+          type: string
+          format: "date-time"
+    ReservationDTO:
       type: object
       properties:
         id:
-          type: integer
-          format: "int64"
+          type: string
+          example: "Reservation ID"
         userID:
-          type: integer
-          format: "int64"
+          type: string
+          example: "User ID"
         carID:
-          type: integer
-          format: "int64"
+          type: string
+          example: "Car ID"
         startDateTime:
           type: string
           format: "date-time"
@@ -524,9 +595,7 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: "int64"
-          example: 12
+          type: string
           description: ID of the created resource
     ErrorDTO:
       type: object

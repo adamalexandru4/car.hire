@@ -1,5 +1,6 @@
 package ro.agilehub.javacourse.car.hire.fleet.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
@@ -9,13 +10,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
+@Builder
 @EqualsAndHashCode(of = "_id")
 @Document("cars")
 public class Car {
 
     @Id
     @Field("_id")
-    private ObjectId id;
+    private String id;
 
     @DBRef(db = "makes")
     private Make make;

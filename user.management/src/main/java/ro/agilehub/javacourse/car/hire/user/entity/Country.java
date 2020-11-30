@@ -1,4 +1,4 @@
-package ro.agilehub.javacourse.car.hire.fleet.entity;
+package ro.agilehub.javacourse.car.hire.user.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,14 +8,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
-@EqualsAndHashCode(of = "_id")
-@Document("makes")
-public class Make {
+@EqualsAndHashCode(of = "id")
+@Document("countries")
+public class Country {
 
     @Id
-    @Field(value = "_id")
-    private String id;
+    @Field("_id")
+    private String    id;
 
-    private String name;
-    private String description;
+    private String      name;
+    private String      isoCode;
 }
