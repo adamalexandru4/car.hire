@@ -1,17 +1,19 @@
 package ro.agilehub.javacourse.car.hire.user.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import ro.agilehub.javacourse.car.hire.api.model.NewReservationDTO;
-import ro.agilehub.javacourse.car.hire.api.model.ResourceCreatedDTO;
-import ro.agilehub.javacourse.car.hire.user.repository.RentalRepository;
-import ro.agilehub.javacourse.car.hire.user.repository.UserRepository;
+import ro.agilehub.javacourse.car.hire.api.model.*;
 
-@Service
-@RequiredArgsConstructor
-public class RentalService {
+import java.util.List;
 
-    private final RentalRepository rentalRepository;
-    private final UserRepository userRepository;
+public interface RentalService {
+
+    ResourceCreatedDTO createReservation(NewReservationDTO newReservation);
+
+    ResponseDTO deleteReservation(String id);
+
+    List<ReservationDTO> getAllReservations(String status);
+
+    ReservationDTO getReservation(String id);
+
+    ResponseDTO updateReservation(String id, List<PatchDocument> patchDocuments);
 
 }

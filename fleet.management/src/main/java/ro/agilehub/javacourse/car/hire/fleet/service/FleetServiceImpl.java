@@ -38,7 +38,7 @@ public class FleetServiceImpl implements FleetService {
     @Override
     public ResponseDTO deleteCar(String id) {
 
-        Car car = carRepository.findById(id)
+        Car car = carRepository.findById(new ObjectId(id))
                 .orElseThrow(() -> new NotFoundException("Car not found"));
 
         carRepository.delete(car);
@@ -50,7 +50,7 @@ public class FleetServiceImpl implements FleetService {
 
     @Override
     public CarDTO getCar(String id) {
-        return carRepository.findById(id)
+        return carRepository.findById(new ObjectId(id))
                 .map(this::mapCarToDTO)
                 .orElseThrow(() -> new NotFoundException("Car not found"));
     }

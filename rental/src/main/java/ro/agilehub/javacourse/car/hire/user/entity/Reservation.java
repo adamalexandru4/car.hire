@@ -11,25 +11,23 @@ import ro.agilehub.javacourse.car.hire.fleet.entity.Car;
 import ro.agilehub.javacourse.car.hire.user.enums.RentStatusEnum;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 
 @Data
-@EqualsAndHashCode(of = "_id")
+@EqualsAndHashCode(of = "id")
 @Document("reservations")
 public class Reservation {
 
     @Id
     @Field("_id")
-    private String id;
+    private ObjectId id;
 
-    @DBRef(db = "users")
-    private User userId;
+    private ObjectId userId;
+    private ObjectId carId;
 
-    @DBRef(db = "cars")
-    private Car carId;
-
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
+    private OffsetDateTime startDateTime;
+    private OffsetDateTime endDateTime;
     private RentStatusEnum status;
 
 }

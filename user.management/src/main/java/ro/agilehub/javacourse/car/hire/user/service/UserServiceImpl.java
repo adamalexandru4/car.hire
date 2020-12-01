@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseDTO deleteUser(String id) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findById(new ObjectId(id))
             .orElseThrow(() -> new NotFoundException("User not found"));
 
         userRepository.delete(user);
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUser(String id) {
-        return userRepository.findById(id)
+        return userRepository.findById(new ObjectId(id))
                 .map(this::mapUserCountry)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseDTO updateUser(String id, List<PatchDocument> patchDocument) {
 
-        User user = userRepository.findById(id)
+        User user = userRepository.findById(new ObjectId(id))
             .orElseThrow(() -> new NotFoundException("User not found"));
 
         // TODO: patch logic
