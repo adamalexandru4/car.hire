@@ -1,19 +1,19 @@
 package ro.agilehub.javacourse.car.hire.user.mappers;
 
 import org.mapstruct.Mapper;
-import ro.agilehub.javacourse.car.hire.user.enums.UserStatusEnum;
+import ro.agilehub.javacourse.car.hire.api.model.StatusEnum;
 
 @Mapper(componentModel = "spring")
-public interface UserStatusMapper {
+public interface StatusMapper {
 
-    default UserStatusEnum toEnum(String value) {
+    default StatusEnum toEnum(String value) {
         if (value == null) {
             return null;
         }
-        return UserStatusEnum.valueOf(value);
+        return StatusEnum.valueOf(value);
     }
 
-    default String toEnum(UserStatusEnum enumValue) {
+    default String toEnum(StatusEnum enumValue) {
         if (enumValue == null) {
             return null;
         }

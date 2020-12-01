@@ -4,11 +4,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import ro.agilehub.javacourse.car.hire.fleet.enums.CarClassEnum;
-import ro.agilehub.javacourse.car.hire.fleet.enums.CarStatusEnum;
+import ro.agilehub.javacourse.car.hire.api.model.CarClassEnum;
+import ro.agilehub.javacourse.car.hire.api.model.StatusEnum;
 
 @Data
 @EqualsAndHashCode(of = "id")
@@ -25,5 +24,5 @@ public class Car {
     private int             mileage;
     private float           fuel;
     private CarClassEnum    carClass;
-    private CarStatusEnum   status;
+    private StatusEnum      status;
 }

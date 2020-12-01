@@ -5,9 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ro.agilehub.javacourse.car.hire.api.model.*;
 import ro.agilehub.javacourse.car.hire.api.specification.UserApi;
+import ro.agilehub.javacourse.car.hire.user.entity.User;
+import ro.agilehub.javacourse.car.hire.user.mappers.UserMapper;
 import ro.agilehub.javacourse.car.hire.user.service.UserService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
@@ -15,9 +18,13 @@ import java.util.List;
 public class UserController implements UserApi {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @Override
-    public ResponseEntity<ResourceCreatedDTO> createUser(@Valid NewUserDTO user) {
+    public ResponseEntity<ResourceCreatedDTO> createUser(@Valid NewUserDTO newUser) {
+
+        User user = userMapper.mapDTOToEntity(newUser);
+
         ResourceCreatedDTO resourceCreatedDTO = userService.createNewUser(user);
         return ResponseEntity.ok(resourceCreatedDTO);
     }
@@ -28,7 +35,7 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<List<UserDTO>> getAllUsers(@Valid String status) {
+    public ResponseEntity<List<UserDTO>> getAllUsers(@Valid StatusEnum status) {
         return ResponseEntity.ok(userService.getAllUsersWithStatus(status));
     }
 

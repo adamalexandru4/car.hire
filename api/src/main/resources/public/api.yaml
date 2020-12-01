@@ -53,8 +53,7 @@ paths:
           name: status
           required: false
           schema:
-            type: string
-            enum: ["ACTIVE", "DELETED"]
+            $ref: "#/components/schemas/StatusEnum"
           description: status of the user account
       responses:
         '200':
@@ -184,8 +183,7 @@ paths:
           name: status
           required: false
           schema:
-            type: string
-            enum: ["ACTIVE", "DELETED"]
+            $ref: "#/components/schemas/StatusEnum"
           description: status of the car
       responses:
         '201':
@@ -316,8 +314,7 @@ paths:
           name: status
           required: false
           schema:
-            type: string
-            enum: ["ACTIVE", "CANCELLED"]
+            $ref: "#/components/schemas/StatusEnum"
           description: status of the reservation
       responses:
         '200':
@@ -457,6 +454,13 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorDTO'
   schemas:
+    OpEnum:
+      type: string
+      description: Operation available for object
+      enum:
+        - ADD
+        - REMOVE
+        - REPLACE
     PatchBody:
       type: array
       items:
@@ -466,12 +470,7 @@ components:
       description: HTTP JSONPatch document from RFC 6902
       properties:
         op:
-          type: string
-          description: Operation available for object
-          enum:
-            - 'add'
-            - 'remove'
-            - 'replace'
+          $ref: "#/components/schemas/OpEnum"
         path:
           type: string
           description: JSON Pointer
@@ -484,6 +483,22 @@ components:
         - op
         - path
         - value
+
+    StatusEnum:
+      type: string
+      enum:
+        - Active
+        - Deleted
+
+    CarClassEnum:
+      type: string
+      enum:
+        - Coupe
+        - Hatchback
+        - Limousine
+        - Sedan
+        - Minivan
+        - Suv
 
     NewUserDTO:
       type: object
@@ -518,7 +533,7 @@ components:
         driverLicense:
           type: string
         status:
-          type: string
+          $ref: "#/components/schemas/StatusEnum"
     NewCarDTO:
       type: object
       properties:
@@ -535,7 +550,7 @@ components:
           type: number
           format: float
         carClass:
-          type: string
+          $ref: "#/components/schemas/CarClassEnum"
     CarDTO:
       type: object
       properties:
@@ -553,9 +568,9 @@ components:
           type: number
           format: float
         carClass:
-          type: string
+          $ref: "#/components/schemas/CarClassEnum"
         status:
-          type: string
+          $ref: "#/components/schemas/StatusEnum"
     NewReservationDTO:
       type: object
       properties:
@@ -590,7 +605,7 @@ components:
           type: string
           format: "date-time"
         status:
-          type: string
+          $ref: "#/components/schemas/StatusEnum"
     ResourceCreatedDTO:
       type: object
       properties:

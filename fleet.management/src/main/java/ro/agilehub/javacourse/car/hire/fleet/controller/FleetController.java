@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ro.agilehub.javacourse.car.hire.api.model.*;
 import ro.agilehub.javacourse.car.hire.api.specification.FleetApi;
+import ro.agilehub.javacourse.car.hire.fleet.entity.Car;
+import ro.agilehub.javacourse.car.hire.fleet.mappers.CarMapper;
 import ro.agilehub.javacourse.car.hire.fleet.service.FleetService;
 
 import javax.validation.Valid;
@@ -16,10 +18,14 @@ import java.util.List;
 public class FleetController implements FleetApi {
 
     private final FleetService fleetService;
+    private final CarMapper carMapper;
 
     @Override
     public ResponseEntity<ResourceCreatedDTO> addCarToFleet(@Valid NewCarDTO newCarDTO) {
-        return ResponseEntity.ok(fleetService.addNewCar(newCarDTO));
+
+        Car newCar = carMapper.mapDTOToEntity(newCarDTO);
+
+        return ResponseEntity.ok(fleetService.addNewCar(newCar));
     }
 
     @Override
@@ -28,7 +34,7 @@ public class FleetController implements FleetApi {
     }
 
     @Override
-    public ResponseEntity<List<CarDTO>> getAllCarsFromFleet(@Valid String status) {
+    public ResponseEntity<List<CarDTO>> getAllCarsFromFleet(@Valid StatusEnum status) {
         return ResponseEntity.ok(fleetService.getAllCarsWithStatus(status));
     }
 

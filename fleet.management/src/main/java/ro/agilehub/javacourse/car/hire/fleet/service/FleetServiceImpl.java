@@ -3,12 +3,10 @@ package ro.agilehub.javacourse.car.hire.fleet.service;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
-import ro.agilehb.javacourse.car.hire.api.exceptions.BadRequestException;
 import ro.agilehb.javacourse.car.hire.api.exceptions.NotFoundException;
 import ro.agilehub.javacourse.car.hire.api.model.*;
 import ro.agilehub.javacourse.car.hire.fleet.entity.Car;
 import ro.agilehub.javacourse.car.hire.fleet.entity.Make;
-import ro.agilehub.javacourse.car.hire.fleet.enums.CarStatusEnum;
 import ro.agilehub.javacourse.car.hire.fleet.mappers.CarMapper;
 import ro.agilehub.javacourse.car.hire.fleet.repository.CarRepository;
 import ro.agilehub.javacourse.car.hire.fleet.repository.MakeRepository;
@@ -25,14 +23,12 @@ public class FleetServiceImpl implements FleetService {
     private final CarMapper carMapper;
 
     @Override
-    public ResourceCreatedDTO addNewCar(NewCarDTO newCar) {
-        Make make = makeRepository.findById(new ObjectId(newCar.getMake()))
+    public ResourceCreatedDTO addNewCar(Car newCar) {
+        makeRepository.findById(newCar.getMake())
                 .orElseThrow(() -> new NotFoundException("Make of car not found"));
+        carRepository.save(newCar);
 
-        Car car = carMapper.mapDTOToEntity(newCar, make);
-        carRepository.save(car);
-
-        return carMapper.mapCarToResourceCreated(car);
+        return carMapper.mapCarToResourceCreated(newCar);
     }
 
     @Override
@@ -56,13 +52,11 @@ public class FleetServiceImpl implements FleetService {
     }
 
     @Override
-    public List<CarDTO> getAllCarsWithStatus(String status) {
+    public List<CarDTO> getAllCarsWithStatus(StatusEnum status) {
         List<Car> cars = null;
 
-        if (status != null && !status.isEmpty()) {
-            CarStatusEnum carStatus = CarStatusEnum.ofValue(status)
-                    .orElseThrow(() -> new BadRequestException("Status value not valid"));
-            cars = carRepository.getAllByStatus(carStatus.getValue());
+        if (status != null) {
+            cars = carRepository.getAllByStatus(status.getValue());
         } else {
             cars = carRepository.findAll();
         }

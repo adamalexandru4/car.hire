@@ -8,7 +8,6 @@ import ro.agilehb.javacourse.car.hire.api.exceptions.NotFoundException;
 import ro.agilehub.javacourse.car.hire.api.model.*;
 import ro.agilehub.javacourse.car.hire.user.entity.Country;
 import ro.agilehub.javacourse.car.hire.user.entity.User;
-import ro.agilehub.javacourse.car.hire.user.enums.UserStatusEnum;
 import ro.agilehub.javacourse.car.hire.user.mappers.UserMapper;
 import ro.agilehub.javacourse.car.hire.user.repository.CountryRepository;
 import ro.agilehub.javacourse.car.hire.user.repository.UserRepository;
@@ -25,15 +24,13 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public ResourceCreatedDTO createNewUser(NewUserDTO newUser) {
+    public ResourceCreatedDTO createNewUser(User newUser) {
 
-        Country country = countryRepository.findById(new ObjectId(newUser.getCountryOfResidence()))
+        Country country = countryRepository.findById(newUser.getCountry())
                 .orElseThrow(() -> new BadRequestException("Country of residence not found"));
 
-        User user = userMapper.mapDTOToEntity(newUser, country);
-        userRepository.save(user);
-
-        return userMapper.mapUserToResourceCreated(user);
+        userRepository.save(newUser);
+        return userMapper.mapUserToResourceCreated(newUser);
     }
 
     @Override
@@ -56,13 +53,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getAllUsersWithStatus(String status) {
+    public List<UserDTO> getAllUsersWithStatus(StatusEnum status) {
         List<User> users = null;
 
-        if (status != null && !status.isEmpty()) {
-            UserStatusEnum userStatus = UserStatusEnum.ofValue(status)
-                    .orElseThrow(() -> new BadRequestException("Status value not valid"));
-            users = userRepository.getAllByUserStatus(userStatus.getValue());
+        if (status != null) {
+            users = userRepository.getAllByUserStatus(status.getValue());
         } else {
             users = userRepository.findAll();
         }
@@ -80,8 +75,7 @@ public class UserServiceImpl implements UserService {
 
         // TODO: patch logic
 
-        ResponseDTO response = new ResponseDTO();
-        return response;
+        return null;
     }
 
 

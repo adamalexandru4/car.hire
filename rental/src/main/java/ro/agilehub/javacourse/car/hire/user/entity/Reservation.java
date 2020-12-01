@@ -4,13 +4,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import ro.agilehub.javacourse.car.hire.fleet.entity.Car;
-import ro.agilehub.javacourse.car.hire.user.enums.RentStatusEnum;
+import ro.agilehub.javacourse.car.hire.api.model.StatusEnum;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 
@@ -28,6 +25,6 @@ public class Reservation {
 
     private OffsetDateTime startDateTime;
     private OffsetDateTime endDateTime;
-    private RentStatusEnum status;
+    private StatusEnum status;
 
 }

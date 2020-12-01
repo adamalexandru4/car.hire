@@ -1,14 +1,12 @@
 package ro.agilehub.javacourse.car.hire.user.entity;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import ro.agilehub.javacourse.car.hire.user.enums.UserStatusEnum;
+import ro.agilehub.javacourse.car.hire.api.model.StatusEnum;
 
 @Data
 @EqualsAndHashCode(of = "id")
@@ -24,8 +22,8 @@ public class User {
     private String          password;
     private String          driverLicense;
     private String          title;
-    private UserStatusEnum  userStatus;
+    private StatusEnum      userStatus;
 
-    private ObjectId         country;
+    private ObjectId        country;
 
 }

@@ -9,16 +9,16 @@ import ro.agilehub.javacourse.car.hire.fleet.entity.Car;
 import ro.agilehub.javacourse.car.hire.user.entity.Reservation;
 import ro.agilehub.javacourse.car.hire.user.entity.User;
 
-@Mapper(componentModel = "spring", uses = { ObjectIdMapper.class, RentStatusMapper.class})
+@Mapper(componentModel = "spring", uses = { ObjectIdMapper.class, StatusMapper.class})
 public interface ReservationMapper {
 
     @Mapping(target = "id", source = "id")
     ResourceCreatedDTO mapEntityToResourceCreatedDTO(Reservation reservation);
 
-    @Mapping(target = "userId", source = "user.id")
-    @Mapping(target = "carId", source = "car.id")
+    @Mapping(target = "userId", source = "userID")
+    @Mapping(target = "carId", source = "carID")
     @Mapping(target = "id", ignore = true)
-    Reservation mapFullDTOToEntity(NewReservationDTO newReservation, Car car, User user);
+    Reservation mapDTOToEntity(NewReservationDTO newReservation);
 
 
     @Mapping(target = "userID", source = "reservation.userId")
