@@ -3,6 +3,7 @@ package ro.agilehub.javacourse.car.hire.user.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import ro.agilehb.javacourse.car.hire.api.controller.ExceptionController;
 import ro.agilehub.javacourse.car.hire.api.model.*;
 import ro.agilehub.javacourse.car.hire.api.specification.RentApi;
 import ro.agilehub.javacourse.car.hire.user.entity.Reservation;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class RentalController implements RentApi {
+public class RentalController extends ExceptionController implements RentApi {
 
     private final RentalService rentalService;
     private final ReservationMapper reservationMapper;

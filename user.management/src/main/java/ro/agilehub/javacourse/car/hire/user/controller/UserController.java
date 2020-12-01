@@ -3,6 +3,7 @@ package ro.agilehub.javacourse.car.hire.user.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import ro.agilehb.javacourse.car.hire.api.controller.ExceptionController;
 import ro.agilehub.javacourse.car.hire.api.model.*;
 import ro.agilehub.javacourse.car.hire.api.specification.UserApi;
 import ro.agilehub.javacourse.car.hire.user.entity.User;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController implements UserApi {
+public class UserController extends ExceptionController implements UserApi {
 
     private final UserService userService;
     private final UserMapper userMapper;

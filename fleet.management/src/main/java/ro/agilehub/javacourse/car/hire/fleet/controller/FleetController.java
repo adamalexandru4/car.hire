@@ -4,6 +4,7 @@ package ro.agilehub.javacourse.car.hire.fleet.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import ro.agilehb.javacourse.car.hire.api.controller.ExceptionController;
 import ro.agilehub.javacourse.car.hire.api.model.*;
 import ro.agilehub.javacourse.car.hire.api.specification.FleetApi;
 import ro.agilehub.javacourse.car.hire.fleet.entity.Car;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class FleetController implements FleetApi {
+public class FleetController extends ExceptionController implements FleetApi {
 
     private final FleetService fleetService;
     private final CarMapper carMapper;
