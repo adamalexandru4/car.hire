@@ -9,7 +9,6 @@ import ro.agilehub.javacourse.car.hire.fleet.entity.Make;
 import java.util.Optional;
 
 @Repository
-public interface MakeRepository extends MongoRepository<Make, String> {
+public interface MakeRepository extends MongoRepository<Make, ObjectId> {
 
-    Optional<Make> findByName(String name);
 }

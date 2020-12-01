@@ -1,6 +1,5 @@
 package ro.agilehub.javacourse.car.hire.fleet.entity;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
@@ -8,23 +7,23 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import ro.agilehub.javacourse.car.hire.fleet.enums.CarClassEnum;
+import ro.agilehub.javacourse.car.hire.fleet.enums.CarStatusEnum;
 
 @Data
-@Builder
-@EqualsAndHashCode(of = "_id")
+@EqualsAndHashCode(of = "id")
 @Document("cars")
 public class Car {
 
     @Id
     @Field("_id")
-    private String id;
+    private ObjectId        id;
 
-    @DBRef(db = "makes")
-    private Make make;
-    private String model;
-    private int year;
-    private int mileage;
-    private float fuel;
-    private String carClass;
-    private String status;
+    private ObjectId        make;
+    private String          model;
+    private int             year;
+    private int             mileage;
+    private float           fuel;
+    private CarClassEnum    carClass;
+    private CarStatusEnum   status;
 }
