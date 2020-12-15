@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         List<User> users = null;
 
         if (status != null) {
-            users = userRepository.getAllByUserStatus(status.getValue());
+            users = userRepository.getAllByUserStatus(status);
         } else {
             users = userRepository.findAll();
         }

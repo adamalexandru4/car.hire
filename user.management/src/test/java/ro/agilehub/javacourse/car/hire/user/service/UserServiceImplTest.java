@@ -1,0 +1,138 @@
+package ro.agilehub.javacourse.car.hire.user.service;
+
+import org.bson.types.ObjectId;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import ro.agilehb.javacourse.car.hire.api.exceptions.BadRequestException;
+import ro.agilehb.javacourse.car.hire.api.exceptions.NotFoundException;
+import ro.agilehub.javacourse.car.hire.api.model.ResourceCreatedDTO;
+import ro.agilehub.javacourse.car.hire.api.model.StatusEnum;
+import ro.agilehub.javacourse.car.hire.api.model.UserDTO;
+import ro.agilehub.javacourse.car.hire.user.entity.Country;
+import ro.agilehub.javacourse.car.hire.user.entity.User;
+import ro.agilehub.javacourse.car.hire.user.mappers.UserMapper;
+import ro.agilehub.javacourse.car.hire.user.repository.CountryRepository;
+import ro.agilehub.javacourse.car.hire.user.repository.UserRepository;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static com.mongodb.internal.connection.tlschannel.util.Util.assertTrue;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
+public class UserServiceImplTest {
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private CountryRepository countryRepository;
+
+    @Mock
+    private UserMapper userMapper;
+
+    @InjectMocks
+    private UserServiceImpl userService;
+
+    private static final String mockObjectId = "507f191e810c19729de860ea";
+
+    @Test
+    public void findAllUsers_whenEmpty_returnEmptyList() {
+        List<User> userList = Collections.emptyList();
+
+        when(userRepository.findAll()).thenReturn(userList);
+
+        assertTrue(userService.getAllUsersWithStatus(null).isEmpty());
+    }
+
+    @Test
+    public void findAllUsers_whenUsers_returnResult() {
+        User user = mock(User.class);
+
+        when(userRepository.findAll()).thenReturn(new ArrayList<>(Collections.singleton(user)));
+
+        assertEquals(1, userService.getAllUsersWithStatus(null).size());
+    }
+
+    @Test
+    public void findAllUser_withStatus_returnResult() {
+
+        User user = mock(User.class);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setStatus(StatusEnum.ACTIVE);
+
+        when(userMapper.userToUserDTO(any(), any())).thenReturn(userDTO);
+        when(userRepository.getAllByUserStatus(any())).thenReturn(new ArrayList<>(Collections.singleton(user)));
+
+        assertEquals(1, userService.getAllUsersWithStatus(StatusEnum.ACTIVE).size());
+        assertEquals(StatusEnum.ACTIVE, userService.getAllUsersWithStatus(StatusEnum.ACTIVE).get(0).getStatus());
+    }
+
+    @Test
+    public void findAllUser_withStatus_returnEmpty() {
+        when(userRepository.getAllByUserStatus(any())).thenReturn(Collections.emptyList());
+
+        assertTrue(userService.getAllUsersWithStatus(StatusEnum.ACTIVE).isEmpty());
+    }
+
+    @Test
+    public void createUser_withWrongCountry_throwBadRequestException() {
+        User user = mock(User.class);
+
+        assertThrows(BadRequestException.class, () -> userService.createNewUser(user));
+    }
+
+    @Test
+    public void createUser_withSuccess() {
+
+        when(countryRepository.findById(any())).thenReturn(Optional.of(mock(Country.class)));
+        when(userMapper.mapUserToResourceCreated(any())).thenReturn(mock(ResourceCreatedDTO.class));
+
+        User user = mock(User.class);
+        assertNotNull(userService.createNewUser(user));
+    }
+
+    @Test
+    public void deleteUser_withWrongFormatId_throwIllegalArgumentException(){
+        assertThrows(IllegalArgumentException.class, () -> userService.deleteUser("test"));
+    }
+
+    @Test
+    public void deleteUser_withWrongId_throwNotFoundException() {
+        assertThrows(NotFoundException.class, () -> userService.deleteUser(mockObjectId));
+    }
+
+    @Test
+    public void deleteUser_withSuccess() {
+        when(userRepository.findById(any())).thenReturn(Optional.of(mock(User.class)));
+
+        assertEquals("User deleted successfully", userService.deleteUser(mockObjectId).getMessage());
+    }
+
+    @Test
+    public void getUser_withWrongId_throwIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> userService.getUser("test"));
+    }
+
+    @Test
+    public void getUser_withWrongId_throwNotFoundException() {
+        assertThrows(NotFoundException.class, () -> userService.getUser(mockObjectId));
+    }
+
+    @Test
+    public void getUser_withSuccess() {
+        when(userMapper.userToUserDTO(any(), any())).thenReturn(mock(UserDTO.class));
+        when(userRepository.findById(any())).thenReturn(Optional.of(mock(User.class)));
+
+        assertNotNull(userService.getUser(mockObjectId));
+    }
+}

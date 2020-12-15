@@ -1,6 +1,7 @@
 package ro.agilehub.javacourse.car.hire.user.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ro.agilehb.javacourse.car.hire.api.controller.ExceptionController;
@@ -27,7 +28,7 @@ public class UserController extends ExceptionController implements UserApi {
         User user = userMapper.mapDTOToEntity(newUser);
 
         ResourceCreatedDTO resourceCreatedDTO = userService.createNewUser(user);
-        return ResponseEntity.ok(resourceCreatedDTO);
+        return new ResponseEntity<>(resourceCreatedDTO, HttpStatus.CREATED);
     }
 
     @Override
