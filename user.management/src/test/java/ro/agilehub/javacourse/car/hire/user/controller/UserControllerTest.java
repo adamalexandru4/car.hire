@@ -44,7 +44,7 @@ public class UserControllerTest {
     @Test
     public void whenGetAllUsers_returnListUserDTO() throws Exception {
 
-        List<UserDTO> users = new ArrayList<UserDTO>();
+        List<UserDTO> users = new ArrayList<>();
         users.add(mock(UserDTO.class));
 
         when(userService.getAllUsersWithStatus(any())).thenReturn(users);

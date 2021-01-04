@@ -1,6 +1,7 @@
 package ro.agilehub.javacourse.car.hire.user.repository;
 
 import org.bson.types.ObjectId;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,6 +45,12 @@ public class UserRepositoryTest {
         mockUser.setUserStatus(StatusEnum.ACTIVE);
 
         user = userRepository.save(mockUser);
+    }
+
+    @After
+    public void cleanup() {
+        countryRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
