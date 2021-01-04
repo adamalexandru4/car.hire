@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
-@EqualsAndHashCode(of = "_id")
+@EqualsAndHashCode(of = "id")
 @Document("makes")
 public class Make {
 

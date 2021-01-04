@@ -3,7 +3,8 @@ package ro.agilehub.javacourse.car.hire.user.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
+import org.joda.time.DateTime;
+import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import ro.agilehub.javacourse.car.hire.api.model.StatusEnum;
@@ -26,4 +27,12 @@ public class User {
 
     private ObjectId        country;
 
+    @CreatedBy
+    private String          createdBy;
+    @CreatedDate
+    private DateTime        createdAt;
+    @LastModifiedBy
+    private String          lastModifiedBy;
+    @LastModifiedDate
+    private DateTime        lastModifiedAt;
 }

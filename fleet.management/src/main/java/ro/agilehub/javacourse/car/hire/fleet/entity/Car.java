@@ -3,7 +3,8 @@ package ro.agilehub.javacourse.car.hire.fleet.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
+import org.joda.time.DateTime;
+import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import ro.agilehub.javacourse.car.hire.api.model.CarClassEnum;
@@ -25,4 +26,13 @@ public class Car {
     private float           fuel;
     private CarClassEnum    carClass;
     private StatusEnum      status;
+
+    @CreatedBy
+    private String          createdBy;
+    @CreatedDate
+    private DateTime createdAt;
+    @LastModifiedBy
+    private String          lastModifiedBy;
+    @LastModifiedDate
+    private DateTime        lastModifiedAt;
 }
