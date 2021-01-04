@@ -3,6 +3,7 @@ package ro.agilehub.javacourse.car.hire.user.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import ro.agilehb.javacourse.car.hire.api.controller.ExceptionController;
 import ro.agilehub.javacourse.car.hire.api.model.*;
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasAuthority('MANAGER')")
 @RequiredArgsConstructor
 public class UserController extends ExceptionController implements UserApi {
 

@@ -18,6 +18,10 @@ tags:
     description: Fleet management
   - name: rental
     description: Rental service
+security:
+  - oAuth:
+      - write
+      - read
 paths:
   /user:
     post:
@@ -416,6 +420,16 @@ paths:
 
 
 components:
+  securitySchemes:
+    oAuth:
+      type: oauth2
+      description: This API uses OAuth2
+      flows:
+        password:
+          tokenUrl: /oauth/token
+          scopes:
+            read: Get information from the API
+            write: Use the API to create or update data
   responses:
     ResourceCreated:
       description: success
