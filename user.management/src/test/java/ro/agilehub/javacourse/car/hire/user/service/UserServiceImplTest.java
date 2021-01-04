@@ -25,6 +25,7 @@ import java.util.Optional;
 import static com.mongodb.internal.connection.tlschannel.util.Util.assertTrue;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -58,9 +59,10 @@ public class UserServiceImplTest {
     public void findAllUsers_whenUsers_returnResult() {
         User user = mock(User.class);
 
-        when(userRepository.findAll()).thenReturn(new ArrayList<>(Collections.singleton(user)));
+        when(userRepository.findAll()).thenReturn(Collections.singletonList(user));
 
-        assertEquals(1, userService.getAllUsersWithStatus(null).size());
+        var result = userService.getAllUsersWithStatus(null);
+        assertEquals(1, result.size());
     }
 
     @Test
@@ -70,8 +72,8 @@ public class UserServiceImplTest {
         UserDTO userDTO = new UserDTO();
         userDTO.setStatus(StatusEnum.ACTIVE);
 
-        when(userMapper.userToUserDTO(any(), any())).thenReturn(userDTO);
-        when(userRepository.getAllByUserStatus(any())).thenReturn(new ArrayList<>(Collections.singleton(user)));
+        when(userMapper.userToUserDTO(eq(user), any())).thenReturn(userDTO);
+        when(userRepository.getAllByUserStatus(any())).thenReturn(Collections.singletonList(user));
 
         assertEquals(1, userService.getAllUsersWithStatus(StatusEnum.ACTIVE).size());
         assertEquals(StatusEnum.ACTIVE, userService.getAllUsersWithStatus(StatusEnum.ACTIVE).get(0).getStatus());
@@ -81,7 +83,8 @@ public class UserServiceImplTest {
     public void findAllUser_withStatus_returnEmpty() {
         when(userRepository.getAllByUserStatus(any())).thenReturn(Collections.emptyList());
 
-        assertTrue(userService.getAllUsersWithStatus(StatusEnum.ACTIVE).isEmpty());
+        var result = userService.getAllUsersWithStatus(StatusEnum.ACTIVE);
+        assertTrue(result.isEmpty());
     }
 
     @Test
