@@ -3,6 +3,7 @@ package ro.agilehub.javacourse.car.hire.fleet.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import ro.agilehb.javacourse.car.hire.api.controller.ExceptionController;
 import ro.agilehub.javacourse.car.hire.api.model.*;
@@ -22,6 +23,7 @@ public class FleetController extends ExceptionController implements FleetApi {
     private final CarMapper carMapper;
 
     @Override
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ResponseEntity<ResourceCreatedDTO> addCarToFleet(@Valid NewCarDTO newCarDTO) {
 
         Car newCar = carMapper.mapDTOToEntity(newCarDTO);
@@ -30,6 +32,7 @@ public class FleetController extends ExceptionController implements FleetApi {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ResponseEntity<ResponseDTO> deleteCar(String id) {
         return ResponseEntity.ok(fleetService.deleteCar(id));
     }
@@ -45,6 +48,7 @@ public class FleetController extends ExceptionController implements FleetApi {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ResponseEntity<ResponseDTO> updateCarDetails(String id, @Valid List<PatchDocument> patchDocument) {
         return ResponseEntity.ok(fleetService.updateCar(id, patchDocument));
     }
