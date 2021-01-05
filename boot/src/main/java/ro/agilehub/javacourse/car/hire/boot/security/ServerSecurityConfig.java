@@ -23,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Collection;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
@@ -51,18 +51,23 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors(httpSecurityCorsConfigurer -> {
-            httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
-        })
-                .authorizeRequests()
+        http.authorizeRequests()
+                // add here the resources which you need to make public, like static content or authorization links
                 .antMatchers("/swagger-ui.html", "/swagger-ui/*", "/v3/api-docs/*",
-                        "/api.yaml", "oauth/*", "./well-known").permitAll()
+                        "/api.yaml", "/oauth/*", "/.well-known/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                // this enable http basic authentication
+                // this enable http basic authentication.
+                // this is needed because the OAuth password flow uses it,
+                // sending the client id as the username and the client secret as the password
                 .httpBasic()
                 .and()
+                // this adds an OAuth2 resource server
                 .oauth2ResourceServer()
+                // this configures the OAuth2 Resources Server to use JWT tokens
+                // it also means you'll have to have the property below specified, as it's manadatory
+                // under the latest Spring Security version to have a jwks URI configured
+                // spring.security.oauth2.resourceserver.jwt.jwk-set-uri
                 .jwt(jwt -> jwt.jwtAuthenticationConverter(getJwtAuthenticationConverter()));
     }
 
@@ -82,15 +87,5 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(CorsConstants.ALLOWED_ORIGINS);
-        configuration.setAllowedMethods(CorsConstants.ALLOWED_METHODS);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 }

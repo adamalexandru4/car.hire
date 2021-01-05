@@ -28,6 +28,7 @@ import java.security.KeyPair;
 import java.security.interfaces.RSAPublicKey;
 
 @Configuration
+@SuppressWarnings("deprecation")
 @EnableAuthorizationServer
 public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter {
 
@@ -42,16 +43,19 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer
                 .tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()")
-                .allowFormAuthenticationForClients();
+                .checkTokenAccess("isAuthenticated()");
     }
 
     /**
-     * Configure the accepted clients and where they are stored.
+     * Configure the accepted cients and where they are stored.
      * We've used inMemory storage, but a database could be used as well for adding clients dynamically
+     *
+     * @param clients
+     * @throws Exception
      */
     @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+    public void configure(ClientDetailsServiceConfigurer clients)
+            throws Exception {
         clients.inMemory()
                 .withClient("carhire.client.id")
                 .secret(passwordEncoder.encode("secret"))
@@ -60,8 +64,11 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     }
 
     /**
-     * Sum up everything by configuring where the tokens are stored, how they are converted (encrypted) and also
-     * the underlying authentication manager
+     * This puts everything together:
+     * where the tokens are stored
+     * how they are converted (encrypted)
+     * and also the underlying authentication manager
+     *
      * @param endpoints
      * @throws Exception
      */
@@ -74,8 +81,9 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     }
 
     /**
-     * Configures the use of JWT tokens (the tokens aren't stored anywhere)
-     * It could be in memory or in a database
+     * This configures the use of JWT tokens (the tokens aren't stored anywhere)
+     * Other options are in memory and in a database
+     *
      * @return
      */
     @Bean
@@ -83,9 +91,9 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
         return new JwtTokenStore(accessTokenConverter());
     }
 
-
     /**
-     * The access token converter encrypts the token using the specified private-public key pair
+     * The access token converter encrypts the token using the specified prive-public key pair
+     *
      * @return
      */
     @Bean
@@ -111,7 +119,8 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     }
 
     /**
-     * Get the key pair based on the jks file in classpath
+     * This builds a key pair  based on the carhire.jks file in the classpath
+     *
      * @return
      */
     @Bean
@@ -121,7 +130,8 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     }
 
     /**
-     * Builds a JWKSet bean (from nimbus), based on the public key from the key pair
+     * This builds a JWKSet bean (from nimbus), based on the public key from the key pair
+     *
      * @return
      */
     @Bean

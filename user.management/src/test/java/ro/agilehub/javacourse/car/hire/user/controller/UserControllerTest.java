@@ -7,12 +7,15 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ro.agilehub.javacourse.car.hire.api.model.ResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.UserDTO;
+import ro.agilehub.javacourse.car.hire.user.MockMvcSetup;
 import ro.agilehub.javacourse.car.hire.user.mappers.UserMapper;
 import ro.agilehub.javacourse.car.hire.user.service.UserService;
 
@@ -27,10 +30,8 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
-public class UserControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
+@ActiveProfiles("integrationtest")
+public class UserControllerTest extends MockMvcSetup {
 
     @MockBean
     private UserService userService;
@@ -38,10 +39,8 @@ public class UserControllerTest {
     @Autowired
     private UserMapper userMapper;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Test
+    @WithMockUser("alexandru")
     public void whenGetAllUsers_returnListUserDTO() throws Exception {
 
         List<UserDTO> users = new ArrayList<>();
@@ -59,6 +58,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser("alexandru")
     public void whenDeleteUser_returnOk() throws Exception {
 
         when(userService.deleteUser(any())).thenReturn(mock(ResponseDTO.class));
@@ -70,7 +70,5 @@ public class UserControllerTest {
         ResponseDTO responseDTO = objectMapper.readValue(getResult.getResponse().getContentAsString(), ResponseDTO.class);
         assertNotNull(responseDTO);
     }
-
-
 
 }

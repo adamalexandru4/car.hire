@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.ActiveProfiles;
 import ro.agilehb.javacourse.car.hire.api.exceptions.BadRequestException;
 import ro.agilehb.javacourse.car.hire.api.exceptions.NotFoundException;
 import ro.agilehub.javacourse.car.hire.api.model.ResourceCreatedDTO;
@@ -30,6 +31,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
+@ActiveProfiles("test")
 public class UserServiceImplTest {
 
     @Mock
