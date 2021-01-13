@@ -1,5 +1,6 @@
 package ro.agilehub.javacourse.car.hire.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Data
 @EqualsAndHashCode(of = "id")
 @Document("countries")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Country {
 
     @Id
@@ -18,6 +20,5 @@ public class Country {
 
     private String      name;
     private String      isoCode;
-
 
 }

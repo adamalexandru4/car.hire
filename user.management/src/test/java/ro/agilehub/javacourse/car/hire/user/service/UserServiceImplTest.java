@@ -25,6 +25,7 @@ import java.util.Optional;
 
 import static com.mongodb.internal.connection.tlschannel.util.Util.assertTrue;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -78,7 +79,7 @@ public class UserServiceImplTest {
         when(userRepository.getAllByUserStatus(any())).thenReturn(Collections.singletonList(user));
 
         assertEquals(1, userService.getAllUsersWithStatus(StatusEnum.ACTIVE).size());
-        assertEquals(StatusEnum.ACTIVE, userService.getAllUsersWithStatus(StatusEnum.ACTIVE).get(0).getStatus());
+        assertEquals(StatusEnum.ACTIVE, userService.getAllUsersWithStatus(StatusEnum.ACTIVE).get(0).getUserStatus());
     }
 
     @Test
@@ -120,7 +121,7 @@ public class UserServiceImplTest {
     public void deleteUser_withSuccess() {
         when(userRepository.findById(any())).thenReturn(Optional.of(mock(User.class)));
 
-        assertEquals("User deleted successfully", userService.deleteUser(mockObjectId).getMessage());
+        assertDoesNotThrow(() -> userService.deleteUser(mockObjectId));
     }
 
     @Test

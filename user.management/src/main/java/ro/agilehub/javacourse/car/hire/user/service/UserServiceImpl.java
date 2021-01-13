@@ -13,7 +13,6 @@ import ro.agilehub.javacourse.car.hire.user.repository.CountryRepository;
 import ro.agilehub.javacourse.car.hire.user.repository.UserRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,36 +23,30 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public ResourceCreatedDTO createNewUser(User newUser) {
+    public User createNewUser(User newUser) {
 
         Country country = countryRepository.findById(newUser.getCountry())
                 .orElseThrow(() -> new BadRequestException("Country of residence not found"));
 
-        userRepository.save(newUser);
-        return userMapper.mapUserToResourceCreated(newUser);
+        return userRepository.save(newUser);
     }
 
     @Override
-    public ResponseDTO deleteUser(String id) {
+    public void deleteUser(String id) {
         User user = userRepository.findById(new ObjectId(id))
             .orElseThrow(() -> new NotFoundException("User not found"));
 
         userRepository.delete(user);
-
-        ResponseDTO response = new ResponseDTO();
-        response.setMessage("User deleted successfully");
-        return response;
     }
 
     @Override
-    public UserDTO getUser(String id) {
+    public User getUser(String id) {
         return userRepository.findById(new ObjectId(id))
-                .map(this::mapUserCountry)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Override
-    public List<UserDTO> getAllUsersWithStatus(StatusEnum status) {
+    public List<User> getAllUsersWithStatus(StatusEnum status) {
         List<User> users = null;
 
         if (status != null) {
@@ -62,24 +55,16 @@ public class UserServiceImpl implements UserService {
             users = userRepository.findAll();
         }
 
-        return users.stream()
-                .map(this::mapUserCountry)
-                .collect(Collectors.toList());
+        return users;
     }
 
     @Override
-    public ResponseDTO updateUser(String id, List<PatchDocument> patchDocument) {
-
-        User user = userRepository.findById(new ObjectId(id))
-            .orElseThrow(() -> new NotFoundException("User not found"));
-
-        // TODO: patch logic
-
-        return null;
+    public void updateUser(User user) {
+        userRepository.save(user);
     }
 
 
-    private UserDTO mapUserCountry(User user) {
+    public UserDTO mapUserCountry(User user) {
         Country country = countryRepository
                 .findById(user.getCountry())
                 .orElse(null);

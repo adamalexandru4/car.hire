@@ -7,14 +7,16 @@ import java.util.List;
 
 public interface UserService {
 
-    ResourceCreatedDTO createNewUser(User newUser);
+    User createNewUser(User newUser);
 
-    ResponseDTO deleteUser(String id);
+    void deleteUser(String id);
 
-    UserDTO getUser(String id);
+    User getUser(String id);
 
-    List<UserDTO> getAllUsersWithStatus(StatusEnum status);
+    List<User> getAllUsersWithStatus(StatusEnum status);
 
-    ResponseDTO updateUser(String id, List<PatchDocument> patchDocument);
+    void updateUser(User user);
+
+    UserDTO mapUserCountry(User user);
 
 }

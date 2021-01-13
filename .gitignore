@@ -2,7 +2,6 @@
 /api/target/
 /boot/target/
 /fleet.management/target/
-/rental/target/
 /user.management/target/
 /.idea/
 /car.hire.iml

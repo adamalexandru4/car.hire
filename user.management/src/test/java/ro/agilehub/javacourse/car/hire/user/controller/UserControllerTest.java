@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ro.agilehub.javacourse.car.hire.api.model.ResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.UserDTO;
 import ro.agilehub.javacourse.car.hire.user.MockMvcSetup;
+import ro.agilehub.javacourse.car.hire.user.entity.User;
 import ro.agilehub.javacourse.car.hire.user.mappers.UserMapper;
 import ro.agilehub.javacourse.car.hire.user.service.UserService;
 
@@ -43,8 +44,8 @@ public class UserControllerTest extends MockMvcSetup {
     @WithMockUser("alexandru")
     public void whenGetAllUsers_returnListUserDTO() throws Exception {
 
-        List<UserDTO> users = new ArrayList<>();
-        users.add(mock(UserDTO.class));
+        List<User> users = new ArrayList<>();
+        users.add(mock(User.class));
 
         when(userService.getAllUsersWithStatus(any())).thenReturn(users);
 
@@ -60,8 +61,6 @@ public class UserControllerTest extends MockMvcSetup {
     @Test
     @WithMockUser("alexandru")
     public void whenDeleteUser_returnOk() throws Exception {
-
-        when(userService.deleteUser(any())).thenReturn(mock(ResponseDTO.class));
 
         var getResult = mockMvc.perform(MockMvcRequestBuilders.delete("/user/123"))
                 .andExpect(MockMvcResultMatchers.status().isOk())

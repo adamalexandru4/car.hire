@@ -1,5 +1,6 @@
 package ro.agilehub.javacourse.car.hire.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
@@ -12,6 +13,7 @@ import ro.agilehub.javacourse.car.hire.api.model.StatusEnum;
 @Data
 @EqualsAndHashCode(of = "id")
 @Document("users")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     @Id
     @Field(name = "_id")

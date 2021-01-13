@@ -16,8 +16,6 @@ tags:
     description: User management
   - name: fleet
     description: Fleet management
-  - name: rental
-    description: Rental service
 security:
   - oAuth:
       - write
@@ -285,139 +283,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-  /rent:
-    post:
-      tags:
-        - rental
-      summary: Create new reservation
-      operationId: createReservation
-      requestBody:
-        description: "Create reservation body"
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/NewReservationDTO"
-      responses:
-        '201':
-          $ref: '#/components/responses/ResourceCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/ServerError'
-    get:
-      tags:
-        - rental
-      summary: Get all reservations
-      description: Return a list with all the reservations
-      operationId: getAllReservations
-      parameters:
-        - in: query
-          name: status
-          required: false
-          schema:
-            $ref: "#/components/schemas/StatusEnum"
-          description: status of the reservation
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/ReservationDTO"
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-  /rent/{id}:
-    get:
-      tags:
-        - rental
-      summary: Get reservation by ID
-      description: Return the reservation found by ID
-      operationId: getReservationByID
-      parameters:
-        - in: "path"
-          name: "id"
-          required: true
-          schema:
-            type: "string"
-          description: Reservation ID
-      responses:
-        '200':
-          description: Return user's details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReservationDTO'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-    patch:
-      tags:
-        - rental
-      summary: Update reservation details
-      description: Update reservation details with new information
-      operationId: updateReservationDetails
-      parameters:
-        - in: "path"
-          name: "id"
-          required: true
-          schema:
-            type: "string"
-          description: Reservation ID
-      requestBody:
-        description: "Update reservation body"
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/PatchBody"
-      responses:
-        '200':
-          $ref: '#/components/responses/Success'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/ServerError'
-    delete:
-      tags:
-        - rental
-      summary: Delete reservation
-      description: Delete reservation from database
-      operationId: deleteReservation
-      parameters:
-        - in: "path"
-          name: "id"
-          required: true
-          schema:
-            type: "string"
-          description: Reservation ID
-      responses:
-        '200':
-          $ref: '#/components/responses/Success'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
 
 components:
   securitySchemes:
@@ -472,9 +337,9 @@ components:
       type: string
       description: Operation available for object
       enum:
-        - ADD
-        - REMOVE
-        - REPLACE
+        - "add"
+        - "remove"
+        - "replace"
     PatchBody:
       type: array
       items:
@@ -583,41 +448,6 @@ components:
           format: float
         carClass:
           $ref: "#/components/schemas/CarClassEnum"
-        status:
-          $ref: "#/components/schemas/StatusEnum"
-    NewReservationDTO:
-      type: object
-      properties:
-        userID:
-          type: string
-          example: "User ID"
-        carID:
-          type: string
-          example: "Car ID"
-        startDateTime:
-          type: string
-          format: "date-time"
-        endDateTime:
-          type: string
-          format: "date-time"
-    ReservationDTO:
-      type: object
-      properties:
-        id:
-          type: string
-          example: "Reservation ID"
-        userID:
-          type: string
-          example: "User ID"
-        carID:
-          type: string
-          example: "Car ID"
-        startDateTime:
-          type: string
-          format: "date-time"
-        endDateTime:
-          type: string
-          format: "date-time"
         status:
           $ref: "#/components/schemas/StatusEnum"
     ResourceCreatedDTO:
