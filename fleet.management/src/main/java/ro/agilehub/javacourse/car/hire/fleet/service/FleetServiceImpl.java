@@ -23,36 +23,29 @@ public class FleetServiceImpl implements FleetService {
     private final CarMapper carMapper;
 
     @Override
-    public ResourceCreatedDTO addNewCar(Car newCar) {
+    public Car addNewCar(Car newCar) {
         makeRepository.findById(newCar.getMake())
                 .orElseThrow(() -> new NotFoundException("Make of car not found"));
-        carRepository.save(newCar);
-
-        return carMapper.mapCarToResourceCreated(newCar);
+        return carRepository.save(newCar);
     }
 
     @Override
-    public ResponseDTO deleteCar(String id) {
+    public void deleteCar(String id) {
 
         Car car = carRepository.findById(new ObjectId(id))
                 .orElseThrow(() -> new NotFoundException("Car not found"));
 
         carRepository.delete(car);
-
-        ResponseDTO response = new ResponseDTO();
-        response.setMessage("Car deleted successfully");
-        return response;
     }
 
     @Override
-    public CarDTO getCar(String id) {
+    public Car getCar(String id) {
         return carRepository.findById(new ObjectId(id))
-                .map(this::mapCarToDTO)
                 .orElseThrow(() -> new NotFoundException("Car not found"));
     }
 
     @Override
-    public List<CarDTO> getAllCarsWithStatus(StatusEnum status) {
+    public List<Car> getAllCarsWithStatus(StatusEnum status) {
         List<Car> cars = null;
 
         if (status != null) {
@@ -61,21 +54,15 @@ public class FleetServiceImpl implements FleetService {
             cars = carRepository.findAll();
         }
 
-        return cars.stream()
-                .map(this::mapCarToDTO)
-                .collect(Collectors.toList());
+        return cars;
     }
 
     @Override
-    public ResponseDTO updateCar(String id, List<PatchDocument> patchDocument) {
+    public void updateCar(String id, List<PatchDocument> patchDocument) {
         // TODO: patch
-
-        ResponseDTO response = new ResponseDTO();
-        response.setMessage("Car updated successfully");
-        return response;
     }
 
-    private CarDTO mapCarToDTO(Car car) {
+    public CarDTO mapCarToDTO(Car car) {
         Make make = makeRepository.findById(car.getMake())
                 .orElse(null);
 

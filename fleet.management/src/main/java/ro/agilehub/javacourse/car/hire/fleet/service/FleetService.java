@@ -7,14 +7,15 @@ import java.util.List;
 
 public interface FleetService {
 
-    ResourceCreatedDTO addNewCar(Car newCar);
+    Car addNewCar(Car newCar);
 
-    ResponseDTO deleteCar(String id);
+    void deleteCar(String id);
 
-    CarDTO getCar(String id);
+    Car getCar(String id);
 
-    List<CarDTO> getAllCarsWithStatus(StatusEnum status);
+    List<Car> getAllCarsWithStatus(StatusEnum status);
 
-    ResponseDTO updateCar(String id, List<PatchDocument> patchDocument);
+    void updateCar(String id, List<PatchDocument> patchDocument);
 
+    CarDTO mapCarToDTO(Car car);
 }

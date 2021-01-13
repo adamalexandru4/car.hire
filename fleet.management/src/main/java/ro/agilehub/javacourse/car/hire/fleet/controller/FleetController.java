@@ -14,6 +14,7 @@ import ro.agilehub.javacourse.car.hire.fleet.service.FleetService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,28 +29,43 @@ public class FleetController extends ExceptionController implements FleetApi {
 
         Car newCar = carMapper.mapDTOToEntity(newCarDTO);
 
-        return ResponseEntity.ok(fleetService.addNewCar(newCar));
+        return ResponseEntity.ok(
+                carMapper.mapCarToResourceCreated(fleetService.addNewCar(newCar))
+        );
     }
 
     @Override
     @PreAuthorize("hasAuthority('MANAGER')")
     public ResponseEntity<ResponseDTO> deleteCar(String id) {
-        return ResponseEntity.ok(fleetService.deleteCar(id));
+        fleetService.deleteCar(id);
+
+        ResponseDTO response = new ResponseDTO();
+        response.setMessage("Car deleted successfully");
+        return ResponseEntity.ok(response);
     }
 
     @Override
     public ResponseEntity<List<CarDTO>> getAllCarsFromFleet(@Valid StatusEnum status) {
-        return ResponseEntity.ok(fleetService.getAllCarsWithStatus(status));
+        return ResponseEntity.ok(
+                fleetService.getAllCarsWithStatus(status)
+                    .stream().map(fleetService::mapCarToDTO)
+                    .collect(Collectors.toList())
+        );
     }
 
     @Override
     public ResponseEntity<CarDTO> getCarByID(String id) {
-        return ResponseEntity.ok(fleetService.getCar(id));
+        return ResponseEntity.ok(fleetService.mapCarToDTO(fleetService.getCar(id)));
     }
 
     @Override
     @PreAuthorize("hasAuthority('MANAGER')")
     public ResponseEntity<ResponseDTO> updateCarDetails(String id, @Valid List<PatchDocument> patchDocument) {
-        return ResponseEntity.ok(fleetService.updateCar(id, patchDocument));
+        fleetService.updateCar(id, patchDocument);
+
+        ResponseDTO response = new ResponseDTO();
+        response.setMessage("Car updated successfully");
+
+        return ResponseEntity.ok(response);
     }
 }
