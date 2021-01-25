@@ -25,7 +25,7 @@ public class User {
     private String          password;
     private String          driverLicense;
     private String          title;
-    private StatusEnum      userStatus;
+    private StatusEnum      status;
 
     private ObjectId        country;
 

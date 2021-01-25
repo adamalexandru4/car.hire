@@ -14,7 +14,7 @@ public class Make {
 
     @Id
     @Field(value = "_id")
-    private String id;
+    private ObjectId id;
 
     private String name;
     private String description;

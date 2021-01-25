@@ -1,6 +1,5 @@
 package ro.agilehub.javacourse.car.hire.user.service;
 
-import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -11,14 +10,13 @@ import ro.agilehb.javacourse.car.hire.api.exceptions.BadRequestException;
 import ro.agilehb.javacourse.car.hire.api.exceptions.NotFoundException;
 import ro.agilehub.javacourse.car.hire.api.model.ResourceCreatedDTO;
 import ro.agilehub.javacourse.car.hire.api.model.StatusEnum;
-import ro.agilehub.javacourse.car.hire.api.model.UserDTO;
+import ro.agilehub.javacourse.car.hire.user.domain.UserDO;
 import ro.agilehub.javacourse.car.hire.user.entity.Country;
 import ro.agilehub.javacourse.car.hire.user.entity.User;
 import ro.agilehub.javacourse.car.hire.user.mappers.UserMapper;
 import ro.agilehub.javacourse.car.hire.user.repository.CountryRepository;
 import ro.agilehub.javacourse.car.hire.user.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -72,19 +70,19 @@ public class UserServiceImplTest {
     public void findAllUser_withStatus_returnResult() {
 
         User user = mock(User.class);
-        UserDTO userDTO = new UserDTO();
-        userDTO.setStatus(StatusEnum.ACTIVE);
+        UserDO userDO = new UserDO();
+        userDO.setStatus(StatusEnum.ACTIVE);
 
-        when(userMapper.userToUserDTO(eq(user), any())).thenReturn(userDTO);
-        when(userRepository.getAllByUserStatus(any())).thenReturn(Collections.singletonList(user));
+        when(userMapper.mapToDO(eq(user))).thenReturn(userDO);
+        when(userRepository.findAllByStatus(any())).thenReturn(Collections.singletonList(user));
 
         assertEquals(1, userService.getAllUsersWithStatus(StatusEnum.ACTIVE).size());
-        assertEquals(StatusEnum.ACTIVE, userService.getAllUsersWithStatus(StatusEnum.ACTIVE).get(0).getUserStatus());
+        assertEquals(StatusEnum.ACTIVE, userService.getAllUsersWithStatus(StatusEnum.ACTIVE).get(0).getStatus());
     }
 
     @Test
     public void findAllUser_withStatus_returnEmpty() {
-        when(userRepository.getAllByUserStatus(any())).thenReturn(Collections.emptyList());
+        when(userRepository.findAllByStatus(any())).thenReturn(Collections.emptyList());
 
         var result = userService.getAllUsersWithStatus(StatusEnum.ACTIVE);
         assertTrue(result.isEmpty());
@@ -92,7 +90,7 @@ public class UserServiceImplTest {
 
     @Test
     public void createUser_withWrongCountry_throwBadRequestException() {
-        User user = mock(User.class);
+        UserDO user = mock(UserDO.class);
 
         assertThrows(BadRequestException.class, () -> userService.createNewUser(user));
     }
@@ -103,7 +101,7 @@ public class UserServiceImplTest {
         when(countryRepository.findById(any())).thenReturn(Optional.of(mock(Country.class)));
         when(userMapper.mapUserToResourceCreated(any())).thenReturn(mock(ResourceCreatedDTO.class));
 
-        User user = mock(User.class);
+        UserDO user = mock(UserDO.class);
         assertNotNull(userService.createNewUser(user));
     }
 
@@ -136,7 +134,7 @@ public class UserServiceImplTest {
 
     @Test
     public void getUser_withSuccess() {
-        when(userMapper.userToUserDTO(any(), any())).thenReturn(mock(UserDTO.class));
+        when(userMapper.mapToDO(any(User.class))).thenReturn(mock(UserDO.class));
         when(userRepository.findById(any())).thenReturn(Optional.of(mock(User.class)));
 
         assertNotNull(userService.getUser(mockObjectId));

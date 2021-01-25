@@ -1,6 +1,5 @@
 package ro.agilehub.javacourse.car.hire.user.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,12 +9,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ro.agilehub.javacourse.car.hire.api.model.ResponseDTO;
-import ro.agilehub.javacourse.car.hire.api.model.UserDTO;
 import ro.agilehub.javacourse.car.hire.user.MockMvcSetup;
+import ro.agilehub.javacourse.car.hire.user.domain.UserDO;
 import ro.agilehub.javacourse.car.hire.user.entity.User;
 import ro.agilehub.javacourse.car.hire.user.mappers.UserMapper;
 import ro.agilehub.javacourse.car.hire.user.service.UserService;
@@ -44,8 +42,8 @@ public class UserControllerTest extends MockMvcSetup {
     @WithMockUser("alexandru")
     public void whenGetAllUsers_returnListUserDTO() throws Exception {
 
-        List<User> users = new ArrayList<>();
-        users.add(mock(User.class));
+        List<UserDO> users = new ArrayList<>();
+        users.add(mock(UserDO.class));
 
         when(userService.getAllUsersWithStatus(any())).thenReturn(users);
 

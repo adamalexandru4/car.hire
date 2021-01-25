@@ -5,9 +5,12 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import ro.agilehb.javacourse.car.hire.api.exceptions.NotFoundException;
 import ro.agilehub.javacourse.car.hire.api.model.*;
+import ro.agilehub.javacourse.car.hire.fleet.domain.CarDO;
+import ro.agilehub.javacourse.car.hire.fleet.domain.MakeDO;
 import ro.agilehub.javacourse.car.hire.fleet.entity.Car;
 import ro.agilehub.javacourse.car.hire.fleet.entity.Make;
 import ro.agilehub.javacourse.car.hire.fleet.mappers.CarMapper;
+import ro.agilehub.javacourse.car.hire.fleet.mappers.MakeMapper;
 import ro.agilehub.javacourse.car.hire.fleet.repository.CarRepository;
 import ro.agilehub.javacourse.car.hire.fleet.repository.MakeRepository;
 
@@ -21,51 +24,49 @@ public class FleetServiceImpl implements FleetService {
     private final CarRepository carRepository;
     private final MakeRepository makeRepository;
     private final CarMapper carMapper;
+    private final MakeMapper makeMapper;
 
     @Override
-    public Car addNewCar(Car newCar) {
-        makeRepository.findById(newCar.getMake())
-                .orElseThrow(() -> new NotFoundException("Make of car not found"));
-        return carRepository.save(newCar);
+    public CarDO addNewCar(CarDO newCar) {
+        setMake(newCar);
+        var carCreated =  carRepository.save(carMapper.mapToEntity(newCar));
+        return carMapper.mapToDO(carCreated);
     }
 
     @Override
     public void deleteCar(String id) {
-
-        Car car = carRepository.findById(new ObjectId(id))
-                .orElseThrow(() -> new NotFoundException("Car not found"));
-
-        carRepository.delete(car);
+        CarDO car = getCar(id);
+        carRepository.deleteById(new ObjectId(id));
     }
 
     @Override
-    public Car getCar(String id) {
-        return carRepository.findById(new ObjectId(id))
-                .orElseThrow(() -> new NotFoundException("Car not found"));
+    public CarDO getCar(String id) {
+        return carMapper.mapToDO(carRepository.findById(new ObjectId(id))
+                .orElseThrow(() -> new NotFoundException("Car not found")));
     }
 
     @Override
-    public List<Car> getAllCarsWithStatus(StatusEnum status) {
-        List<Car> cars = null;
+    public List<CarDO> getAllCarsWithStatus(StatusEnum status) {
+        List<CarDO> cars = null;
 
         if (status != null) {
-            cars = carRepository.getAllByStatus(status.getValue());
+            cars = carMapper.mapToDOList(carRepository.getAllByStatus(status.getValue()));
         } else {
-            cars = carRepository.findAll();
+            cars = carMapper.mapToDOList(carRepository.findAll());
         }
 
         return cars;
     }
 
     @Override
-    public void updateCar(String id, List<PatchDocument> patchDocument) {
-        // TODO: patch
+    public void updateCar(CarDO car) {
+        var carUpdated = carMapper.mapToEntity(car);
+        carRepository.save(carUpdated);
     }
 
-    public CarDTO mapCarToDTO(Car car) {
-        Make make = makeRepository.findById(car.getMake())
-                .orElse(null);
-
-        return carMapper.mapEntityToDTO(car, make);
+    public void setMake(CarDO car) {
+        MakeDO make = makeMapper.mapToDO(makeRepository.findById(new ObjectId(car.getMakeID()))
+                .orElseThrow(() -> new NotFoundException("Make of car not found")));
+        car.setMakeDO(make);
     }
 }

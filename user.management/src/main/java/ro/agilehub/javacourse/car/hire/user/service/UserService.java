@@ -1,22 +1,23 @@
 package ro.agilehub.javacourse.car.hire.user.service;
 
 import ro.agilehub.javacourse.car.hire.api.model.*;
+import ro.agilehub.javacourse.car.hire.user.domain.UserDO;
 import ro.agilehub.javacourse.car.hire.user.entity.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    User createNewUser(User newUser);
+    UserDO createNewUser(UserDO newUser);
 
     void deleteUser(String id);
 
-    User getUser(String id);
+    UserDO getUser(String id);
 
-    List<User> getAllUsersWithStatus(StatusEnum status);
+    List<UserDO> getAllUsersWithStatus(StatusEnum status);
 
-    void updateUser(User user);
+    void updateUser(UserDO user);
 
-    UserDTO mapUserCountry(User user);
+    UserDO mapUserCountry(UserDO user);
 
 }

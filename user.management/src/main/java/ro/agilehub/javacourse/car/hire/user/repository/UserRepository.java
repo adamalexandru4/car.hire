@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface UserRepository extends MongoRepository<User, ObjectId> {
 
-    List<User> getAllByUserStatus(StatusEnum status);
+    List<User> findAllByStatus(StatusEnum status);
 }

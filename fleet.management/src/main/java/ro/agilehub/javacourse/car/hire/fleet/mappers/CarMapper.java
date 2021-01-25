@@ -5,23 +5,29 @@ import org.mapstruct.Mapping;
 import ro.agilehub.javacourse.car.hire.api.model.CarDTO;
 import ro.agilehub.javacourse.car.hire.api.model.NewCarDTO;
 import ro.agilehub.javacourse.car.hire.api.model.ResourceCreatedDTO;
+import ro.agilehub.javacourse.car.hire.fleet.domain.CarDO;
 import ro.agilehub.javacourse.car.hire.fleet.entity.Car;
-import ro.agilehub.javacourse.car.hire.fleet.entity.Make;
-import ro.agilehub.javacourse.car.hire.user.mappers.ObjectIdMapper;
-import ro.agilehub.javacourse.car.hire.user.mappers.StatusMapper;
 
-@Mapper(componentModel = "spring", uses = {ObjectIdMapper.class, StatusMapper.class, CarClassMapper.class})
+import java.util.List;
+
+@Mapper(config = BaseMapperConfig.class)
 public interface CarMapper {
 
-    @Mapping(target = "id", source = "id")
-    ResourceCreatedDTO mapCarToResourceCreated(Car car);
+    ResourceCreatedDTO mapCarToResourceCreated(CarDO car);
 
     @Mapping(target = "status", expression = "java(ro.agilehub.javacourse.car.hire.api.model.StatusEnum.ACTIVE)")
-    @Mapping(target = "id", ignore = true)
-    Car mapDTOToEntity(NewCarDTO newCar);
+    @Mapping(target = "makeID", source = "make")
+    CarDO mapToDO(NewCarDTO newCar);
 
-    @Mapping(target = "id", source = "car.id")
-    @Mapping(target = "make", source = "make.name")
-    CarDTO mapEntityToDTO(Car car, Make make);
+    @Mapping(target = "makeID", source = "make")
+    CarDO mapToDO(Car newCar);
 
+    @Mapping(target = "makeID", source = "make")
+    List<CarDO> mapToDOList(List<Car> newCar);
+
+    @Mapping(target = "make", source = "makeDO.name")
+    CarDTO mapToDTO(CarDO car);
+
+    @Mapping(target = "make", source = "makeID")
+    Car mapToEntity(CarDO car);
 }

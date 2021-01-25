@@ -1,21 +1,22 @@
 package ro.agilehub.javacourse.car.hire.fleet.service;
 
 import ro.agilehub.javacourse.car.hire.api.model.*;
+import ro.agilehub.javacourse.car.hire.fleet.domain.CarDO;
 import ro.agilehub.javacourse.car.hire.fleet.entity.Car;
 
 import java.util.List;
 
 public interface FleetService {
 
-    Car addNewCar(Car newCar);
+    CarDO addNewCar(CarDO newCar);
 
     void deleteCar(String id);
 
-    Car getCar(String id);
+    CarDO getCar(String id);
 
-    List<Car> getAllCarsWithStatus(StatusEnum status);
+    List<CarDO> getAllCarsWithStatus(StatusEnum status);
 
-    void updateCar(String id, List<PatchDocument> patchDocument);
+    void updateCar(CarDO car);
 
-    CarDTO mapCarToDTO(Car car);
+    void setMake(CarDO car);
 }

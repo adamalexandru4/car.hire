@@ -366,8 +366,8 @@ components:
     StatusEnum:
       type: string
       enum:
-        - Active
-        - Deleted
+        - "active"
+        - "deleted"
 
     CarClassEnum:
       type: string

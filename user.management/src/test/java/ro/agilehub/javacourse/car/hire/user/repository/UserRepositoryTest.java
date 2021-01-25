@@ -13,9 +13,6 @@ import ro.agilehub.javacourse.car.hire.api.model.StatusEnum;
 import ro.agilehub.javacourse.car.hire.user.entity.Country;
 import ro.agilehub.javacourse.car.hire.user.entity.User;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -44,7 +41,7 @@ public class UserRepositoryTest {
         User mockUser = new User();
         mockUser.setCountry(countryID);
         mockUser.setFirstname("Alexandru");
-        mockUser.setUserStatus(StatusEnum.ACTIVE);
+        mockUser.setStatus(StatusEnum.ACTIVE);
 
         user = userRepository.save(mockUser);
     }
@@ -57,16 +54,16 @@ public class UserRepositoryTest {
 
     @Test
     public void findUserWithStatusActive_returnUser() {
-        var userFound = userRepository.getAllByUserStatus(StatusEnum.ACTIVE);
+        var userFound = userRepository.findAllByStatus(StatusEnum.ACTIVE);
 
         assertFalse(userFound.isEmpty());
-        assertEquals(userFound.get(0).getUserStatus(), StatusEnum.ACTIVE);
+        assertEquals(userFound.get(0).getStatus(), StatusEnum.ACTIVE);
         assertEquals(userFound.get(0).getFirstname(), user.getFirstname());
     }
 
     @Test
     public void findUserWithStatusDeleted_returnEmpty() {
-        var userFound = userRepository.getAllByUserStatus(StatusEnum.DELETED);
+        var userFound = userRepository.findAllByStatus(StatusEnum.DELETED);
 
         assertTrue(userFound.isEmpty());
     }
