@@ -2,7 +2,6 @@ package ro.agilehub.javacourse.car.hire.fleet.service;
 
 import ro.agilehub.javacourse.car.hire.api.model.*;
 import ro.agilehub.javacourse.car.hire.fleet.domain.CarDO;
-import ro.agilehub.javacourse.car.hire.fleet.entity.Car;
 
 import java.util.List;
 

@@ -12,7 +12,6 @@
     <artifactId>user.management</artifactId>
 
     <properties>
-        <skipTests>true</skipTests>
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
     </properties>
 

@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("User should not have ID already set");
         }
 
-        if (userRepository.findByUsername(userDO.getUsername()).isPresent()) {
+        if (userDO.getUsername() != null && userRepository.findByUsername(userDO.getUsername()).isPresent()) {
             throw new BadRequestException("Username exists already");
         }
 

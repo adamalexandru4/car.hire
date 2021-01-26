@@ -57,8 +57,8 @@ public class UserRepositoryTest {
         var userFound = userRepository.findAllByStatus(StatusEnum.ACTIVE);
 
         assertFalse(userFound.isEmpty());
-        assertEquals(userFound.get(0).getStatus(), StatusEnum.ACTIVE);
-        assertEquals(userFound.get(0).getFirstname(), user.getFirstname());
+        assertEquals(StatusEnum.ACTIVE, userFound.get(0).getStatus());
+        assertEquals(user.getFirstname(), userFound.get(0).getFirstname());
     }
 
     @Test
