@@ -18,5 +18,5 @@ public interface FleetService {
 
     void updateCar(CarDO car);
 
-    void setMake(CarDO car);
+    void setCarMake(CarDO car);
 }

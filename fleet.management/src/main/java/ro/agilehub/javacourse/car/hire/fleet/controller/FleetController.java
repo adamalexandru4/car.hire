@@ -16,10 +16,8 @@ import ro.agilehb.javacourse.car.hire.api.controller.ExceptionController;
 import ro.agilehub.javacourse.car.hire.api.model.*;
 import ro.agilehub.javacourse.car.hire.api.specification.FleetApi;
 import ro.agilehub.javacourse.car.hire.fleet.domain.CarDO;
-import ro.agilehub.javacourse.car.hire.fleet.entity.Car;
 import ro.agilehub.javacourse.car.hire.fleet.mappers.CarMapper;
 import ro.agilehub.javacourse.car.hire.fleet.service.FleetService;
-import ro.agilehub.javacourse.car.hire.user.domain.UserDO;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -59,7 +57,7 @@ public class FleetController extends ExceptionController implements FleetApi {
         return ResponseEntity.ok(
                 fleetService.getAllCarsWithStatus(status)
                     .stream().map(carDO -> {
-                        fleetService.setMake(carDO);
+                        fleetService.setCarMake(carDO);
                         return carMapper.mapToDTO(carDO);
                     }).collect(Collectors.toList())
         );
@@ -69,7 +67,7 @@ public class FleetController extends ExceptionController implements FleetApi {
     public ResponseEntity<CarDTO> getCarByID(String id) {
 
         CarDO car = fleetService.getCar(id);
-        fleetService.setMake(car);
+        fleetService.setCarMake(car);
 
         return ResponseEntity.ok(carMapper.mapToDTO(car));
     }
