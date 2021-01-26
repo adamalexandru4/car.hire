@@ -10,7 +10,7 @@ import ro.agilehub.javacourse.car.hire.boot.auditing.MongoAuditorAware;
 
 @ComponentScan(basePackages = "ro.agilehub.javacourse.car.hire")
 @SpringBootApplication
-@EnableMongoAuditing
+@EnableMongoAuditing(auditorAwareRef = "auditorAware")
 public class CarHireApplication {
     public static void main(final String[] args) {
         SpringApplication.run(CarHireApplication.class, args);

@@ -37,6 +37,7 @@ public class UserController extends ExceptionController implements UserApi {
     public ResponseEntity<ResourceCreatedDTO> createUser(@Valid NewUserDTO newUser) {
         UserDO createdUser = userService.createNewUser(userMapper.mapToDO(newUser));
         ResourceCreatedDTO resourceCreatedDTO = userMapper.mapUserToResourceCreated(createdUser);
+
         return new ResponseEntity<>(resourceCreatedDTO, HttpStatus.CREATED);
     }
 
@@ -77,10 +78,9 @@ public class UserController extends ExceptionController implements UserApi {
 
             // Get reservation from DB
             UserDO reservation = userService.getUser(id);
-            JsonNode reservationPatch = null;
-
-            reservationPatch = jsonPatch.apply(objectMapper.convertValue(reservation, JsonNode.class));
+            JsonNode reservationPatch = jsonPatch.apply(objectMapper.convertValue(reservation, JsonNode.class));
             UserDO finalReservation = objectMapper.treeToValue(reservationPatch, UserDO.class);
+
             userService.updateUser(finalReservation);
 
             response.setMessage("Reservation updated successfully");

@@ -84,9 +84,7 @@ public class FleetController extends ExceptionController implements FleetApi {
 
             // Get reservation from DB
             CarDO reservation = fleetService.getCar(id);
-            JsonNode reservationPatch = null;
-
-            reservationPatch = jsonPatch.apply(objectMapper.convertValue(reservation, JsonNode.class));
+            JsonNode reservationPatch = jsonPatch.apply(objectMapper.convertValue(reservation, JsonNode.class));
             CarDO finalCar = objectMapper.treeToValue(reservationPatch, CarDO.class);
             fleetService.updateCar(finalCar);
 

@@ -1,6 +1,7 @@
 package ro.agilehub.javacourse.car.hire.user.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import ro.agilehb.javacourse.car.hire.api.exceptions.BadRequestException;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -29,6 +31,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDO createNewUser(UserDO newUser) {
 
+        checkForAddingNewUser(newUser);
+
         Country country = countryRepository.findById(new ObjectId(newUser.getCountryID()))
                 .orElseThrow(() -> new BadRequestException("Country of residence not found"));
         newUser.setCountryDO(countryMapper.mapToDO(country));
@@ -38,11 +42,24 @@ public class UserServiceImpl implements UserService {
         return userMapper.mapToDO(userRepository.save(newUserEntity));
     }
 
+    private void checkForAddingNewUser(UserDO userDO) {
+
+        if (userDO.getId() != null) {
+            throw new BadRequestException("User should not have ID already set");
+        }
+
+        if (userRepository.findByUsername(userDO.getUsername()).isPresent()) {
+            throw new BadRequestException("Username exists already");
+        }
+
+    }
+
     @Override
     public void deleteUser(String id) {
         UserDO user = getUser(id);
 
         userRepository.deleteById(new ObjectId(user.getId()));
+        log.info("User: " + id + " deleted successfully");
     }
 
     @Override
@@ -69,6 +86,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(UserDO user) {
         userRepository.save(userMapper.mapToEntity(user));
+        log.info("User: " + user.getId() + " updated successfully");
     }
 
 

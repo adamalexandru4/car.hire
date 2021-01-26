@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
-import org.joda.time.DateTime;
 import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import ro.agilehub.javacourse.car.hire.api.model.StatusEnum;
+
+import java.time.*;
 
 @Data
 @EqualsAndHashCode(of = "id")
@@ -32,9 +33,9 @@ public class User {
     @CreatedBy
     private String          createdBy;
     @CreatedDate
-    private DateTime        createdAt;
+    private LocalDateTime createdAt;
     @LastModifiedBy
     private String          lastModifiedBy;
     @LastModifiedDate
-    private DateTime        lastModifiedAt;
+    private LocalDateTime  lastModifiedAt;
 }

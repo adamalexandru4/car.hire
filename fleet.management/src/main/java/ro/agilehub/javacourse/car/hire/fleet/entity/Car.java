@@ -3,12 +3,13 @@ package ro.agilehub.javacourse.car.hire.fleet.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
-import org.joda.time.DateTime;
 import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import ro.agilehub.javacourse.car.hire.api.model.CarClassEnum;
 import ro.agilehub.javacourse.car.hire.api.model.StatusEnum;
+
+import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(of = "id")
@@ -17,22 +18,22 @@ public class Car {
 
     @Id
     @Field("_id")
-    private ObjectId        id;
+    private ObjectId id;
 
-    private ObjectId        make;
-    private String          model;
-    private int             year;
-    private int             mileage;
-    private float           fuel;
-    private CarClassEnum    carClass;
-    private StatusEnum      status;
+    private ObjectId make;
+    private String model;
+    private int year;
+    private int mileage;
+    private float fuel;
+    private CarClassEnum carClass;
+    private StatusEnum status;
 
     @CreatedBy
-    private String          createdBy;
+    private String createdBy;
     @CreatedDate
-    private DateTime createdAt;
+    private LocalDateTime createdAt;
     @LastModifiedBy
-    private String          lastModifiedBy;
+    private String lastModifiedBy;
     @LastModifiedDate
-    private DateTime        lastModifiedAt;
+    private LocalDateTime lastModifiedAt;
 }

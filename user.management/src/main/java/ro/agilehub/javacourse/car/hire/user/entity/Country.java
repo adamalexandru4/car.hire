@@ -16,9 +16,9 @@ public class Country {
 
     @Id
     @Field("_id")
-    private ObjectId    id;
+    private ObjectId id;
 
-    private String      name;
-    private String      isoCode;
+    private String name;
+    private String isoCode;
 
 }
